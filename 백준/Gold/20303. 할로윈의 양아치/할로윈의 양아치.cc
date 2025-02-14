@@ -2,8 +2,6 @@
 #define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
 using namespace std;
 
-#define int long long int
-
 int n, m, k;
 int candy[30001];
 int p[30001];
