@@ -8,19 +8,6 @@ int l, n, k;
 set<int> s;
 queue<pair<int, int>> q;
 
-void BFS()
-{
-    while(k--){
-        int dist = q.front().second;
-        cout << dist <<"\n";
-        int x = q.front().first;
-        s.insert(x);
-        q.pop();
-        if(!s.count(x-1) && x-1>=0) q.push({x-1, dist+1});
-        if(!s.count(x+1) && x+1<=l) q.push({x+1, dist+1});
-    }
-}
-
 signed main()
 {
     FASTIO;
@@ -30,6 +17,20 @@ signed main()
         q.push({e, 0});
         s.insert(e);
     }
-    BFS();
+    //BFS
+    while(k--){
+        int dist = q.front().second;
+        cout << dist <<"\n";
+        int x = q.front().first;
+        q.pop();
+        if(!s.count(x-1) && x-1>=0){
+            q.push({x-1, dist+1});
+            s.insert(x-1);
+        }
+        if(!s.count(x+1) && x+1<=l){
+            q.push({x+1, dist+1});
+            s.insert(x+1);
+        }
+    }
     return 0;
 }
