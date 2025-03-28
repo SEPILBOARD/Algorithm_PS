@@ -3,7 +3,7 @@
 using namespace std;
 
 int n, m, k;
-int a[100][100], b[100][100], ans[100][100];
+int a[100][100], b[100][100];
 
 int main()
 {
@@ -18,17 +18,15 @@ int main()
         for(int j = 0; j<k; j++)
             cin >> b[i][j];
 
-    for(int i = 0; i<n; i++)
-        for(int j = 0; j<k; j++)
-            for(int l = 0; l<m; l++)
-                ans[i][j] += a[i][l] * b[l][j];
-
-
     for(int i = 0; i<n; i++){
         for(int j = 0; j<k; j++){
-            cout << ans[i][j] <<" ";       
+            int ans = 0;
+            for(int l = 0; l<m; l++)
+                ans += a[i][l] * b[l][j];
+            cout << ans <<" ";
         }
         cout << "\n";
     }
+
     return 0;
 }
