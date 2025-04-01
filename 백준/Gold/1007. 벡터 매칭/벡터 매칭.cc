@@ -3,7 +3,6 @@
 using namespace std;
 
 pair<int, int> v[20];
-bool used[20];
 int n;
 double ans;
 
@@ -22,7 +21,6 @@ void bt(int idx, int pcnt, int mcnt, int vx, int vy)
 void solve()
 {
     ans = 987654321;
-    memset(used, false, sizeof(used));
     cin >> n;
     for(int i = 0; i<n; i++){
         int x, y; cin >> x >> y;
