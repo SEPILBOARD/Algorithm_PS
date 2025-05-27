@@ -16,8 +16,6 @@ void bt(int idx, int cnt)
     }
 
     for(int i = idx+1; i<n; i++){
-        if(i!=0)
-        if(a[i-1]==a[i]) continue;
         ans[cnt]=a[i];
         bt(i, cnt+1);
     }
