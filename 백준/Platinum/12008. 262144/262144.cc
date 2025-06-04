@@ -4,7 +4,6 @@ using namespace std;
 #define int long long int
 
 int n;
-vector<int> a;
 vector<int> idxs[65];
 
 signed main()
@@ -31,11 +30,5 @@ signed main()
         }
     }
     cout << ans <<"\n";
-
-    // for(int i = 1; i<=ans; i++){
-    //     for(int e: idxs[i]) cout << e <<" ";
-    //     cout << "\n";
-    // }
-
     return 0;
 }
