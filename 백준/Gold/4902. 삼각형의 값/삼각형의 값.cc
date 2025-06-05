@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
 #define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
 using namespace std;
-#define int long long int
 
 int n;
 int tri[401][1001];
@@ -17,7 +16,7 @@ void solve()
         }
     }
 
-    int ans = -987654321000;
+    int ans = -987654321;
     for(int i = 1; i<=n; i++){
         for(int j = 1; j<=2*i-1; j++){
             int tsum = tri[i][j];
