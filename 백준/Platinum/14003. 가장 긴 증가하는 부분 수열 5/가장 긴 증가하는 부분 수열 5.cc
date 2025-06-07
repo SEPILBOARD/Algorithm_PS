@@ -1,0 +1,43 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+
+int n;
+int a[1'000'001];
+int lidx[1'000'001];
+vector<int> l;
+
+int main()
+{
+    FASTIO;
+    cin >> n;
+    for(int i = 0; i<n; i++){
+        cin >> a[i];
+    }
+
+    l.push_back(-1987654321);
+    for(int i = 0; i<n; i++){
+        if(a[i]>l.back()){
+            lidx[i] = l.size();
+            l.push_back(a[i]);
+        }
+        else{
+            int idx = lower_bound(l.begin(), l.end(), a[i]) - l.begin();
+            l[idx] = a[i];
+            lidx[i] = idx;
+        }
+    }
+    int ans = l.size()-1;
+    cout << ans <<"\n";
+    vector<int> lis;
+    for(int i = n-1; i>=0 && ans>0; i--){
+        if(lidx[i] == ans){
+            lis.push_back(a[i]);
+            ans--;
+        }
+    }
+    for(int i = lis.size()-1; i>=0; i--){
+        cout << lis[i] <<" ";
+    }
+    return 0;
+}
