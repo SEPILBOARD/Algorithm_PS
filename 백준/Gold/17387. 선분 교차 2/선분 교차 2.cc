@@ -5,9 +5,6 @@ using namespace std;
 
 struct Point{
     int x, y;
-    bool operator==(Point o){
-        return x==o.x && y==o.y;
-    }
 };
 
 int ccw(Point p1, Point p2, Point p3)
@@ -35,11 +32,6 @@ signed main()
     FASTIO;
     for(int i = 0; i<4; i++){
         cin >> p[i].x >> p[i].y;
-    }
-
-    if(p[2]==p[0] || p[2]==p[1] || p[3]==p[0] || p[3]==p[1]){
-        cout << 1;
-        return 0;
     }
     
     int ccw1 = ccw(p[0], p[1], p[2]);
