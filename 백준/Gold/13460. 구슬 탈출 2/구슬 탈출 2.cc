@@ -30,18 +30,7 @@ void bt(int cnt)
     int bx = b.x;
     int by = b.y;
 
-    // cout << cnt <<"\n";
-    // for(int i = 0; i<n; i++){
-    //     for(int j = 0; j<m; j++){
-    //         cout << graph[i][j];
-    //     }
-    //     cout << "\n";
-    // }
-    // cout << "\n";
-
     for(int i = 0; i<4; i++){
-        // cout << "i=" << i <<": " << b.y << " vs " << r.y <<"\n\n";
-
         if((i==0 && b.y>r.y) || (i==1 && b.y<r.y) || (i==2 && b.x>r.x) || (i==3 && b.x<r.x)){
             while(graph[b.x+dx[i]][b.y+dy[i]] == '.' && b!=o) b.x += dx[i], b.y += dy[i];
             graph[bx][by] = '.';
@@ -72,9 +61,6 @@ void bt(int cnt)
         r.y = ry;
         b.x = bx;
         b.y = by;
-        // else{
-        //     cout <<cnt <<": " <<"i=" <<i <<": x\n";
-        // }
     }
 }
 
