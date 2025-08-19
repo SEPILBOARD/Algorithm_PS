@@ -3,20 +3,22 @@
 using namespace std;
 
 int n, m;
-set<int> s;
+int a[100'001];
 
 int main()
 {
     FASTIO;
     cin >> n;
     for(int i = 0; i<n; i++){
-        int e; cin >> e;
-        s.insert(e);
+        cin >> a[i];
     }
+    sort(a, a+n);
     cin >> m;
     for(int i = 0; i<m; i++){
         int e; cin >> e;
-        cout << s.count(e) <<"\n";
+        int idx = lower_bound(a, a+n, e) - a;
+        if(idx<n && a[idx] == e) cout << "1\n";
+        else cout << "0\n";
     }
     
     return 0;
