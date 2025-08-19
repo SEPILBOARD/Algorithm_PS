@@ -18,27 +18,15 @@ void Union(int x, int y, int w)
 {
     x = Find(x);
     y = Find(y);
-    if(x==y) return;
-
-    if(cc[x].size() < cc[y].size()){
-        for(int xc: cc[x]){
-            p[x] = y;
-            cc[y].push_back(xc);
+    if (x == y) return;
+    p[x] = y;
+    for (int xc : cc[x]){
+        for (int yc : cc[y]){
+            ans[xc][yc] = w;
+            ans[yc][xc] = w;
         }
     }
-    else{
-        p[y] = x;
-        for(int yc: cc[y]){
-            cc[x].push_back(yc);
-        }
-    }
-
-    for(int xc: cc[x]){
-        for(int yc: cc[y]){
-            ans[xc][yc] = max(w, ans[xc][yc]);
-            ans[yc][xc] = max(w, ans[yc][xc]);
-        }
-    }
+    for (int xc : cc[x]) cc[y].push_back(xc);
 }
 
 bool compare(pair<int, pair<int, int>> fs, pair<int, pair<int,int>> sc)
