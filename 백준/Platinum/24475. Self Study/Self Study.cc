@@ -4,14 +4,14 @@ using namespace std;
 typedef long long int ll;
 
 ll n, m;
-int a[300'001];
-int b[300'001];
+ll a[300'001];
+ll b[300'001];
 
 signed main()
 {
     FASTIO;
     cin >> n >> m;
-    int mx = 0;
+    ll mx = 0;
     for(int i = 0; i<n; i++) cin >> a[i];
     for(int i = 0; i<n; i++){
         cin >> b[i];
@@ -21,7 +21,8 @@ signed main()
 
 
 
-    ll lo = 0, hi = mx*m+1;
+    ll lo = 0;
+    ll hi = mx*m+1ll;
     while(lo+1<hi){
         ll mid = lo+hi>>1;
         ll cnt = 0ll;
@@ -29,14 +30,15 @@ signed main()
         // cout << mid <<":\n";
 
         for(int i = 0; i<n; i++){
-            if(mid <= (ll)a[i]*m){
-                cnt += (mid+a[i]-1)/a[i];
+            if(mid <= a[i]*m){
+                cnt += (mid+a[i]-1ll)/a[i];
                 // cout << i <<": ";
             }
             else{
-                cnt += ((mid-(ll)a[i]*m)+b[i]-1)/b[i] + m;
+                cnt += ((mid-a[i]*m)+b[i]-1ll)/b[i] + m;
             }
             // cout << cnt <<", ";
+            if(cnt > n*m) break;
         }
         // cout << "\n";
 
