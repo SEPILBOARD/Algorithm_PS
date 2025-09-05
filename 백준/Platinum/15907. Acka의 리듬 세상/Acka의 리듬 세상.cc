@@ -10,16 +10,16 @@ int n;
 int a[1'000];
 int tcnt[2];
 vector<int> k;
-map<int, int> kcnt;
+int kcnt[2'000'001];
 map<int, int> cnt;
 
 void makePrime()
 {
     isnp[0] = true;
     isnp[1] = true;
-    for(int i = 2; i<=2'000'000; i++){
+    for(int i = 2; i*i<=2'000'000; i++){
         if(isnp[i]) continue;
-        if(i<=2000) p.push_back(i);
+        p.push_back(i);
         for(int j = i+i; j<=2'000'000; j+=i){
             isnp[j] = true;
         }
