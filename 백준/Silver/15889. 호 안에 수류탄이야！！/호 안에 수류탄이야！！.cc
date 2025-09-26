@@ -3,7 +3,7 @@
 using namespace std;
 
 int n;
-int a[30'001];
+pair<int, int> a[30'001];
 vector<pair<int, int>> swp;
 
 bool compare(pair<int, int> &fs, pair<int, int> &sc)
@@ -17,22 +17,17 @@ signed main()
     FASTIO;
     cin >> n;
     for(int i = 0; i<n; i++){
-        cin >> a[i];
-        swp.push_back({a[i], 1});
+        cin >> a[i].first;
     }
     for(int i = 0; i<n; i++){
-        int r;
-        cin >> r;
-        swp.push_back({a[i]+r, -1});
+        cin >> a[i].second;
     }
 
-    sort(swp.begin(), swp.end(), compare);
-    int cnt = 0;
+    sort(a, a+n, compare);
     int idx = 0;
-    for(auto [pos, r] : swp){
-        cnt += r;
-        idx++;
-        if(cnt == 0 && idx != 2*n){
+    for(int i = 1; i<n; i++){
+        while(idx<i && a[idx].first+a[idx].second < a[i].first) idx++;
+        if(idx == i){
             cout << "엄마 나 전역 늦어질 것 같아\n";
             return 0;
         }
