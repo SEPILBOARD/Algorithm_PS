@@ -32,53 +32,39 @@ bool isbtw(const Point &p1, const Point &p2, const Point &bt)
     else return false;
 }
 
-int isCross(const Point &p1, const Point &p2, const Point &p3, const Point &p4)
+int isCross(const Point &a1, const Point &a2, const Point &b1, const Point &b2)
 {
-    int ccw1 = ccw(p1, p2, p3);
-    int ccw2 = ccw(p1, p2, p4);
-    int ccw3 = ccw(p3, p4, p1);
-    int ccw4 = ccw(p3, p4, p2);
+    int ccw1 = ccw(a1, a2, b1);
+    int ccw2 = ccw(a1, a2, b2);
+    int ccw3 = ccw(b1, b2, a1);
+    int ccw4 = ccw(b1, b2, a2);
 
     //교점 1개, 끝점X
     if(ccw1*ccw2 <0 && ccw3*ccw4 <0) return 2;
 
     //전부 일직선
-    if((ccw1==0 && ccw2==0) || (ccw3==0 && ccw4==0)){
-        if(p1.x != p2.x){
-            int p1x = min(p1.x, p2.x);
-            int p2x = max(p1.x, p2.x);
-            int p3x = min(p3.x, p4.x);
-            int p4x = max(p3.x, p4.x);
-            if(p1x > p3x){
-                swap(p1x, p3x);
-                swap(p2x, p4x);
-            }
+    if((ccw1==0 && ccw2==0)){
+        // -- --
+        if(max(a1.x, a2.x) < min(b1.x, b2.x)) return 0;
+        if(max(a1.y, a2.y) < min(b1.y, b2.y)) return 0;
+        if(max(b1.x, b2.x) < min(a1.x, a2.x)) return 0;
+        if(max(b1.y, b2.y) < min(a1.y, a2.y)) return 0;
 
-            if(p2x == p3x) return 1; // --.--
-            if(p1x <= p3x && p3x <= p2x) return 3; // -.-.-
-            else return 0; // --  --
-        }
-        else{
-            int p1y = min(p1.y, p2.y);
-            int p2y = max(p1.y, p2.y);
-            int p3y = min(p3.y, p4.y);
-            int p4y = max(p3.y, p4.y);
-            if(p1y > p3y){
-                swap(p1y, p3y);
-                swap(p2y, p4y);
-            }
+        // --.--
+        if(a1==b1 && !isbtw(a1,a2,b2) && !isbtw(b1,b2,a2)) return 1;
+        if(a1==b2 && !isbtw(a1,a2,b1) && !isbtw(b1,b2,a2)) return 1;
+        if(a2==b1 && !isbtw(a1,a2,b2) && !isbtw(b1,b2,a1)) return 1;
+        if(a2==b2 && !isbtw(a1,a2,b1) && !isbtw(b1,b2,a1)) return 1;
 
-            if(p2y == p3y) return 1; // --.--
-            if(p1y <= p3y && p3y <= p2y) return 3; // -.-.-
-            else return 0; // --  --
-        }
+        // -.-.-
+        return 3;
     }    
 
     //교점 1개, 끝점
-    if(!ccw1 && isbtw(p1, p2, p3)) return 1;
-    if(!ccw2 && isbtw(p1, p2, p4)) return 1;
-    if(!ccw3 && isbtw(p3, p4, p1)) return 1;
-    if(!ccw4 && isbtw(p3, p4, p2)) return 1;
+    if(!ccw1 && isbtw(a1, a2, b1)) return 1;
+    if(!ccw2 && isbtw(a1, a2, b2)) return 1;
+    if(!ccw3 && isbtw(b1, b2, a1)) return 1;
+    if(!ccw4 && isbtw(b1, b2, a2)) return 1;
 
     //교점 X
     return 0;
