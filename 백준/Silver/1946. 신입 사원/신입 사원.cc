@@ -6,18 +6,12 @@ typedef long long int ll;
 int n;
 pair<int, int> a[100'001];
 
-bool compare(pair<int, int> &fs, pair<int, int> &sc)
-{
-    if(fs.first == sc.first) return fs.second > sc.second;
-    return fs.first < sc.first;
-}
-
 void solve()
 {
     cin >> n;
     for(int i = 0; i<n; i++) cin >> a[i].first >> a[i].second;
 
-    sort(a, a+n, compare);
+    sort(a, a+n);
 
     int cur = a[0].second;
     int ans = 1;
@@ -27,10 +21,6 @@ void solve()
             ans++;
         }
     }
-
-    // for(int i = 0; i<n; i++){
-    //     cout << a[i].first << " " << a[i].second <<"\n";
-    // }
     
     cout << ans <<"\n";
 }
