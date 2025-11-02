@@ -4,7 +4,7 @@ using namespace std;
 typedef long long int ll;
 
 int n, m;
-map<string, int> idx;
+unordered_map<string, int> idx;
 string s[100'001];
 
 signed main()
