@@ -15,7 +15,7 @@ signed main()
         cout << "-1";
         return 0;
     }
-    ll lo = 0, hi = 1e+18;
+    ll lo = 0, hi = x;
     while(lo+1<hi){
         ll mid = lo+hi>>1;
         if(z != 100LL*(y+mid)/(x+mid)){
