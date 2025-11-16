@@ -53,7 +53,6 @@ void solve()
 
 
     for(int i = 0; i<m; i++){
-        trk[i] = 0;
         adj[i].clear();
     }
 }
