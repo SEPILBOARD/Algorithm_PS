@@ -1,0 +1,85 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long ll;
+#define INF 2139062143
+
+int n, m;
+string s;
+tuple<int, int, int> a[11];
+
+map<string, int> idx;
+vector<string> state;
+int cidx = 2;
+
+int dist[50'001];
+priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+
+signed main()
+{
+    FASTIO;
+    cin >> n;
+    for(int i = 0; i<n; i++){
+        int x;
+        cin >> x;
+        s.push_back('0'+x);
+    }
+    
+    cin >> m;
+    for(int i = 0; i<m; i++){
+        int l, r, c;
+        cin >> l >> r >> c;
+        a[i] = {l-1, r-1, c};
+    }
+    
+    
+    idx[s] = 0;
+    state.push_back(s);
+    
+    sort(s.begin(), s.end());
+    idx[s] = 1;
+    state.push_back(s);
+
+    if(state[0] == state[1]){
+        cout << 0;
+        return 0;
+    }
+    
+    memset(dist, 0x7f, sizeof(dist));
+    dist[0] = 0;
+
+    pq.push({0, 0});
+    while(!pq.empty()){
+        auto[d, cur] = pq.top();
+        pq.pop();
+        
+        if(dist[cur] != d) continue;
+        
+        string curs = state[cur];
+        for(int i = 0; i<m; i++){
+            auto[l, r, c] = a[i];
+            string nxts = curs;
+            int nxt = 0;
+            
+            swap(nxts[l], nxts[r]);
+
+            if(idx.count(nxts) == 0){
+                nxt = cidx;
+                idx[nxts] = cidx++;
+                state.push_back(nxts);
+            }
+            else{
+                nxt = idx[nxts];
+            }
+            
+            if(dist[nxt] <= d+c) continue;
+            dist[nxt] = d+c;
+            pq.push({d+c, nxt});
+        }
+    }
+
+    if(dist[1] >= 2139062143) cout << -1;
+    else cout << dist[1];
+
+    return 0;
+}
