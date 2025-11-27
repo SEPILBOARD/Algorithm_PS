@@ -1,44 +1,53 @@
 #include <bits/stdc++.h>
 #define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
 using namespace std;
-#define INF 2139062143
+typedef long long ll;
+#define INF 1e+9
 
-int n, m, x;
-vector<pair<int, int>> adj[1001];
-int dist[1002][1002];
+int n, m, X;
+vector<pair<int, int>> adj[1'001][2];
+int dist[1'001][2];
 
-void dijk(int s)
+void dijk(int rvs)
 {
+    for(int i = 1; i<=n; i++){
+        dist[i][rvs] = INF;
+    }
+
     priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-    dist[s][s] = 0;
-    pq.push({0, s});
+    dist[X][rvs] = 0;
+    pq.push({0, X});
     while(!pq.empty()){
-        auto [w, node] = pq.top();
+        auto[d, cur] = pq.top();
         pq.pop();
-        if(dist[s][node] != w) continue;
-        for(auto [ew, next] : adj[node]){
-            if(dist[s][next] < w+ew) continue;
-            pq.push({w+ew, next});
-            dist[s][next] = w+ew;
+        if(dist[cur][rvs] != d) continue;
+        for(auto[nxt, nw]: adj[cur][rvs]){
+            if(d+nw>=dist[nxt][rvs]) continue;
+            dist[nxt][rvs] = d+nw;
+            pq.push({d+nw, nxt});
         }
     }
 }
 
-int main()
+signed main()
 {
     FASTIO;
-    memset(dist, 0x7f, sizeof(dist));
-    cin >> n >> m >> x;
+    cin >> n >> m >> X;
+
     for(int i = 0; i<m; i++){
-        int s, e, w;
-        cin >> s >> e >> w;
-        adj[s].push_back({w, e});
+        int x, y, w;
+        cin >> x >> y >> w;
+
+        adj[x][0].push_back({y, w});
+        adj[y][1].push_back({x, w});
     }
-    for(int i = 1; i<=n; i++) dijk(i);
+
+    dijk(0);
+    dijk(1);
 
     int ans = 0;
     for(int i = 1; i<=n; i++){
-        ans = max(ans, dist[i][x] + dist[x][i]);
+        ans = max(ans, dist[i][0]+dist[i][1]);
     }
     cout << ans;
     return 0;
