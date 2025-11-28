@@ -1,0 +1,35 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long ll;
+
+int n;
+
+void solve()
+{
+    cin >> n;
+    vector<int> v(n);
+    for(int i = 0; i<n; i++) cin >> v[i];
+    sort(v.begin(), v.end());
+
+    int lidx = (n+1)/2-1;
+    int ridx = lidx+1;
+
+    for(int i = 0; i<n; i++){
+        if(i&1){
+            cout << v[ridx++] <<" ";
+        }
+        else{
+            cout << v[lidx--] <<" ";
+        }
+    }
+    cout << "\n";
+}
+
+signed main()
+{
+    FASTIO;
+    int _tc; cin >> _tc;
+    while(_tc--) solve();    
+    return 0;
+}
