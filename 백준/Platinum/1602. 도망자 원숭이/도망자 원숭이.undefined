@@ -1,0 +1,57 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long ll;
+#define INF 1e+9
+
+int n, m, q;
+int adj[501][501];
+int itrp[501];
+int ans[501][501];
+
+signed main()
+{
+    FASTIO;
+    cin >> n >> m >> q;
+    
+    vector<pair<int, int>> ks(n);
+    for(int i = 1; i<=n; i++){
+        for(int j = 1; j<=n; j++){
+            adj[i][j] = INF;
+            ans[i][j] = INF;
+        }
+    }
+    for(int i = 1; i<=n; i++){
+        cin >> itrp[i];
+        adj[i][i] = 1;
+        ks[i-1] = {itrp[i], i};
+    }
+    
+    for(int i = 0; i<m; i++){
+        int s, e, w;
+        cin >> s >> e >> w;
+        adj[s][e] = w;
+        adj[e][s] = w;
+    }
+    
+    sort(ks.begin(), ks.end());
+    for(auto[itr, k]: ks){
+        for(int i = 1; i<=n; i++){
+            for(int j = 1; j<=n; j++){
+                if(adj[i][k] == INF || adj[k][j] == INF) continue;
+                
+                adj[i][j] = min(adj[i][j], adj[i][k]+adj[k][j]);
+                ans[i][j] = min(ans[i][j], adj[i][j]+max(itr, max(itrp[i], itrp[j])));
+            }
+        }
+    }
+    
+    for(int i = 0; i<q; i++){
+        int s, e;
+        cin >> s >> e;
+        if(ans[s][e] == INF) cout << "-1\n";
+        else cout << ans[s][e] <<"\n";
+    }
+    
+    return 0;
+}
