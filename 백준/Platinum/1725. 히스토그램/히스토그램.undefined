@@ -1,0 +1,49 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long ll;
+
+int n;
+int a[100'001];
+int le[100'001];
+int ri[100'001];
+
+stack<pair<int, int>> st;
+
+signed main()
+{
+    FASTIO;
+    cin >> n;
+    for(int i = 1; i<=n; i++) cin >> a[i];
+
+    st.push({0, -1});
+    for(int i = 1; i<=n; i++){
+        auto[idx, h] = st.top();
+        while(h>=a[i]){
+            ri[idx] = i;
+            st.pop();
+            auto[nidx, nh] = st.top();
+            idx = nidx;
+            h = nh;
+        }
+
+        le[i] = idx;
+        st.push({i, a[i]});
+    }
+
+    while(st.size()>1){
+        auto[idx, h] = st.top();
+        ri[idx] = n+1;
+        st.pop();
+    }
+
+    ll ans = 0;
+    for(int i = 1; i<=n; i++){
+        // cout << i <<": " << 1LL*(ri[i]-le[i])*a[i] <<"\n";
+        // cout << i <<": " << le[i] <<", " <<ri[i] <<", " << a[i] <<"\n";
+        ans = max(ans, 1LL*(ri[i]-le[i]-1)*a[i]);
+    }
+    cout << ans;
+
+    return 0;
+}
