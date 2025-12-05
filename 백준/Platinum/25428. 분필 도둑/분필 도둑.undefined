@@ -1,0 +1,67 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long ll;
+
+int p[100'001];
+int cnt[100'001];
+
+int Find(int x)
+{
+    if(x == p[x]) return x;
+    else return p[x] = Find(p[x]);
+}
+
+void Union(int x, int y)
+{
+    x = Find(x);
+    y = Find(y);
+
+    p[x] = y;
+    cnt[y] += cnt[x];
+    cnt[x] = 0;
+}
+
+
+int n;
+pair<int, int> a[100'001];
+vector<int> adj[100'001];
+bool check[100'001];
+
+signed main()
+{
+    FASTIO;
+    cin >> n;
+    for(int i = 1; i<=n; i++){
+        cin >> a[i].first;
+        a[i].second = i;
+
+        p[i] = i;
+        cnt[i] = 1;
+    }
+
+    for(int i = 1; i<n; i++){
+        int a, b;
+        cin >> a >> b;
+        adj[a].push_back(b);
+        adj[b].push_back(a);
+    }
+
+    sort(a+1, a+n+1, greater<>());
+
+    ll ans = 0;
+    for(int i = 1; i<=n; i++){
+        auto[w, cur] = a[i];
+        check[cur] = true;
+        for(int nxt: adj[cur]){
+            if(check[nxt]){
+                Union(nxt, cur);
+            }
+        }
+
+        ans = max(ans, 1LL*w*cnt[Find(cur)]);
+    }
+
+    cout << ans;    
+    return 0;
+}
