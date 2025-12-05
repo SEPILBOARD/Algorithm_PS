@@ -1,0 +1,65 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long ll;
+#define INF 1e+18
+
+int n, m, k;
+vector<pair<int, int>> adj[10'001];
+
+ll dist[10'001][21];
+priority_queue<tuple<ll, int, int>, vector<tuple<ll, int, int>>, greater<>> pq;
+
+signed main()
+{
+    FASTIO;
+    cin >> n >> m >> k;
+    for(int i = 0; i<m; i++){
+        int s, e, w;
+        cin >> s >> e >> w;
+        adj[s].push_back({e, w});
+        adj[e].push_back({s, w});
+    }
+
+    for(int j = 0; j<=k; j++){
+        for(int i = 1; i<=n; i++){
+            dist[i][j] = INF;
+        }
+    }
+
+    dist[1][0] = 0;
+    pq.push({0, 1, 0});
+    while(!pq.empty()){
+        auto[d, cur, cnt] = pq.top();
+        pq.pop();
+
+        if(dist[cur][cnt] != d) continue;
+        for(auto[nxt, nw]: adj[cur]){
+            if(dist[nxt][cnt] > d+nw){
+                // cout << cur << "->" << nxt <<": " << d+nw <<", " << cnt  <<"\n";
+                dist[nxt][cnt] = d+nw;
+                pq.push({dist[nxt][cnt], nxt, cnt});
+            }
+            if(cnt<k && dist[nxt][cnt+1] > d){
+                dist[nxt][cnt+1] = d;
+                pq.push({dist[nxt][cnt+1], nxt, cnt+1});
+            }
+        }
+    }
+
+    ll ans = INF;
+    for(int cnt = 0; cnt<=k; cnt++){
+        ans = min(ans, dist[n][cnt]);
+    }
+
+    cout << ans << "\n";
+
+    // for(int cnt = 0 ; cnt <=k; cnt++){
+    //     for(int i = 1; i<=n; i++){
+    //         cout << dist[i][cnt] <<" ";
+    //     }
+    //     cout << "\n";
+    // }
+
+    return 0;
+}   
