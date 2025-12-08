@@ -1,0 +1,70 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long int ll;
+
+int x, y, g;
+int n;
+map<string, int> mp;
+set<int> team[100'001];
+set<int> noTeam[100'001];
+
+
+signed main()
+{
+    FASTIO;
+    cin >> x;
+    for(int i = 0; i<x; i++){
+        string a, b;
+        cin >> a >> b;
+        if(mp.count(a) == 0){
+            mp[a] = n++;
+        }
+        if(mp.count(b) == 0){
+            mp[b] = n++;
+        }
+        team[mp[a]].insert(mp[b]);
+        team[mp[b]].insert(mp[a]);
+    }
+
+    cin >> y;
+    for(int i = 0; i<y; i++){
+        string a, b;
+        cin >> a >> b;
+        if(mp.count(a) == 0){
+            mp[a] = n++;
+        }
+        if(mp.count(b) == 0){
+            mp[b] = n++;
+        }
+        noTeam[mp[a]].insert(mp[b]);
+        noTeam[mp[b]].insert(mp[a]);
+    }
+
+    int ans = 0;
+    cin >> g;
+    for(int tc = 0; tc<g; tc++){
+        string s[3];
+        for(int i = 0; i<3; i++){
+            cin >> s[i];
+            if(mp.count(s[i]) == 0) mp[s[i]] = n++;
+        }
+
+        for(int i = 0; i<3; i++){
+            int idx = mp[s[i]];
+            int tcnt = 0;
+            int ntcnt = 0;
+            for(int j = 0; j<3; j++){
+                if(i == j) continue;
+
+                tcnt += team[idx].count(mp[s[j]]);
+                ntcnt += noTeam[idx].count(mp[s[j]]);
+            }
+            ans += team[idx].size()-tcnt;
+            ans += ntcnt;
+        }
+    }
+
+    cout << ans/2;   
+    return 0;
+}
