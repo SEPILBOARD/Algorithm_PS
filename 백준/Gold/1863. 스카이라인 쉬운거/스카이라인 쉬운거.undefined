@@ -1,0 +1,39 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long ll;
+
+int n;
+pair<int, int> xy[50'001];
+
+signed main()
+{
+    FASTIO;
+    cin >> n;
+    for(int i = 0; i<n; i++){
+        int x, y;
+        cin >> x >> y;
+        xy[i] = {x, y};
+    }
+
+    stack<int> st;
+    st.push(0);
+    int ans = 0;
+    for(int i = 0; i<n; i++){
+        auto[x, y] = xy[i];
+        while(y<st.top()){
+            st.pop();
+            ans++;
+        }
+        if(y>st.top()){
+            st.push(y);
+        }
+    }
+    while(st.size()>1){
+        st.pop();
+        ans++;
+    }
+    cout << ans;
+    
+    return 0;
+}
