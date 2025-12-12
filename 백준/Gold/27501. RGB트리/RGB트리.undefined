@@ -1,0 +1,94 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long int ll;
+
+int n;
+vector<int> adj[500'001];
+int rgb[500'001][3];
+
+int dp[500'001][3];
+bool v[500'001];
+char ans[500'001];
+
+int dfs(int cur, int c, int prv)
+{
+    int &ret = dp[cur][c];
+    if(ret != 0) return ret;
+    
+    ret = rgb[cur][c];
+
+    for(int nxt: adj[cur]){
+        if(nxt == prv) continue;
+        vector<int> temp;
+        for(int j = 0; j<3; j++){
+            if(c == j) continue;
+            temp.push_back(dfs(nxt, j, cur));
+        }
+        ret += max(temp[0], temp[1]);
+    }
+
+    return ret;
+}
+
+signed main()
+{
+    FASTIO;
+    cin >> n;
+    for(int i = 1; i<n; i++){
+        int s, e;
+        cin >> s >> e;
+        adj[s].push_back(e);
+        adj[e].push_back(s);
+    }
+
+    for(int i = 1; i<=n; i++){
+        cin >> rgb[i][0] >> rgb[i][1] >> rgb[i][2];
+    }
+
+    int mxi = 0;
+    int mx = 0;
+    for(int i = 0; i<3; i++){
+        if(mx < dfs(1, i, 0)){
+            mxi = i;
+            mx = dfs(1, i, 0);
+        }
+    }
+    cout << mx << "\n";
+
+    if(mxi == 0) ans[1] = 'R';
+    else if(mxi == 1) ans[1] = 'G';
+    else if(mxi == 2) ans[1] = 'B';
+
+    queue<pair<int, int>> q;
+    q.push({1, mxi});
+    v[1] = true;
+    while(!q.empty()){
+        auto [cur, color] = q.front();
+        q.pop();
+
+        if(color == 0) ans[cur] = 'R';
+        else if(color == 1) ans[cur] = 'G';
+        else if(color == 2) ans[cur] = 'B';
+
+        for(int nxt: adj[cur]){
+            if(v[nxt]) continue;
+
+            int mxc = 0;
+            int mxdp = 0;
+            for(int c = 0; c<3; c++){
+                if(color == c) continue;
+                if(mxdp < dp[nxt][c]){
+                    mxc = c;
+                    mxdp = dp[nxt][c];
+                }
+            }
+            q.push({nxt, mxc});
+            v[nxt] = true;
+        }   
+    }
+    
+    for(int i = 1; i<=n; i++) cout << ans[i];
+    
+    return 0;
+}
