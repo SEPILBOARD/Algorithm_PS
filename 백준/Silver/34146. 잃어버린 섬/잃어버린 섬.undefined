@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long ll;
+
+int n, m;
+int a[101][101];
+int cnt[10'001];
+
+
+signed main()
+{
+    FASTIO;
+    int mx = 0;
+    cin >> n >> m;
+    for(int i = 0; i<n; i++){
+        for(int j = 0; j<m; j++){
+            cin >> a[i][j];
+            cnt[a[i][j]]++;
+            mx = max(mx, a[i][j]);
+        }
+    }
+
+    if(m&1){
+        int mcnt = 0;
+        for(int i = 1; i<=mx; i++){
+            if(cnt[i]&1){
+                mcnt++;
+            }
+        }
+        if(mcnt>n){
+            cout << "NO\n";
+            return 0;
+        }
+    }
+    else{
+        for(int i = 1; i<=mx; i++){
+            if(cnt[i]&1){
+                cout << "NO\n";
+                return 0;
+            }
+        }
+    }
+
+    cout << "YES\n";
+    return 0;
+}
