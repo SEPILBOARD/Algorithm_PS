@@ -1,0 +1,75 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long ll;
+
+int n;
+string p;
+
+void solve()
+{
+    cin >> n;
+    cin >> p;
+
+    int sum = 0;
+    for(int i = 0; i<n; i++){
+        sum += p[i]-'0';
+    }
+
+    for(int i = n-1; i>=0; i--){
+        // 나머지 1
+        if((sum-(p[i]-'0'))%3 == 1){
+            if(p[i] == '2'){
+                for(int j = 0; j<n; j++){
+                    if(i == j) cout << 5;
+                    else cout << p[j];
+                }
+            }
+            else{
+                for(int j = 0; j<n; j++){
+                    if(i == j) cout << 2;
+                    else cout << p[j];
+                }
+            }
+        }
+        // 나머지 2
+        else if((sum-(p[i]-'0'))%3 == 2){
+            if(p[i] == '4'){
+                for(int j = 0; j<n; j++){
+                    if(i == j) cout << 7;
+                    else cout << p[j];
+                }
+            }
+            else{
+                for(int j = 0; j<n; j++){
+                    if(i == j) cout << 4;
+                    else cout << p[j];
+                }
+            }
+        }
+        // 나머지 0
+        else{
+            if(p[i] == '3'){
+                for(int j = 0; j<n; j++){
+                    if(i == j) cout << 9;
+                    else cout << p[j];
+                }
+            }
+            else{
+                for(int j = 0; j<n; j++){
+                    if(i == j) cout << 6;
+                    else cout << p[j];
+                }
+            }
+        }
+        cout << " 3\n";
+    }
+}
+
+signed main()
+{
+    FASTIO;
+    int tc; cin >> tc;    
+    while(tc--) solve();
+    return 0;
+}
