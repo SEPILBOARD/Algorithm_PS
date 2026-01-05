@@ -1,0 +1,38 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long ll;
+
+int n, m;
+set<string> s;
+
+signed main()
+{
+    FASTIO;
+    cin >> n >> m;
+    for(int i = 0; i<n; i++){
+        string t;
+        cin >> t;
+        s.insert(t);
+    }
+
+    for(int r = 0; r<m; r++){
+        string t;
+        cin >> t;
+
+        string cur = "";
+        for(int i = 0; i<t.length(); i++){
+            if(t[i] == ','){
+                if(s.count(cur)) s.erase(cur);
+                cur = "";
+            }
+            else{
+                cur.push_back(t[i]);
+            }
+        }
+        if(s.count(cur)) s.erase(cur);
+        cout << s.size() << '\n';
+    }
+    
+    return 0;
+}
