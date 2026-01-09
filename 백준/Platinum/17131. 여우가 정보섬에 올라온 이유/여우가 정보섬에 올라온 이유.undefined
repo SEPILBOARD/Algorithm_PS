@@ -1,0 +1,86 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long ll;
+#define int long long
+#define MOD 1'000'000'007
+
+const int base = 200'001;
+
+class Seg
+{
+    private:
+        int n;
+        vector<int> tree;
+
+        void upd(int node, int start, int end, int idx, int val)
+        {
+            if(idx<start || end<idx) return;
+            if(start == end){
+                tree[node]++;
+                return;
+            }
+
+            int mid = start+end>>1;
+            upd(2*node, start, mid, idx, val);
+            upd(2*node+1, mid+1, end, idx, val);
+
+            tree[node] = tree[2*node]+tree[2*node+1];
+        }
+
+        int qry(int node, int start, int end, int left, int right)
+        {
+            if(end<left || right<start) return 0;
+            if(left<=start && end<=right) return tree[node];
+
+            int mid = start+end>>1;
+            int l = qry(2*node, start, mid, left, right);
+            int r = qry(2*node+1, mid+1, end, left, right);
+
+            return l+r;
+        }
+
+    public:
+        void init(int n)
+        {
+            this->n = n;
+            tree.resize(4*n);
+        }
+
+        void upd(int idx, int val) {upd(1, 1, n, idx, val);}
+        int qry(int left, int right) {return qry(1, 1, n, left, right);}
+};
+
+vector<int> xs[400'002];
+
+signed main()
+{
+    FASTIO;
+    
+    int n;
+    cin >> n;
+    Seg cnt;
+    cnt.init(400'001);
+
+    for(int i = 0; i<n; i++){
+        int x, y;
+        cin >> x >> y;
+        xs[y+base].push_back(x+base);
+    }
+
+    ll ans = 0;
+    for(int y = 400'001; y>=0; y--){
+        for(int x: xs[y]){
+            ll l = cnt.qry(1, x-1);
+            ll r = cnt.qry(x+1, 400'001);
+            ans = (ans+l*r%MOD)%MOD;
+        }
+        for(int x: xs[y]){
+            cnt.upd(x, 1);
+        }
+    }
+
+    cout << ans;
+    
+    return 0;
+}
