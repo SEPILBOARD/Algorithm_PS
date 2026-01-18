@@ -1,0 +1,29 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long int ll;
+
+int n, t;
+deque<int> dq;
+
+signed main()
+{
+    FASTIO;
+    cin >> n;
+    cin >> t;
+    for(int i = 0; i<2*n; i++){
+        int a; cin >> a;
+        dq.push_front(a);
+    }
+
+    for(int i = 0; i<t; i++){
+        int b; cin >> b;
+        for(int j = 1; j<b; j++){
+            dq.push_front(dq.back());
+            dq.pop_back();
+        }
+        cout << dq.back() <<' ';
+    }
+
+    return 0;
+}
