@@ -1,0 +1,84 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long ll;
+#define INF 9187201950435737471
+
+int N, M, A, B;
+
+vector<pair<int, int>> adj[200'001];
+
+priority_queue<pair<ll, int>, vector<pair<ll, int>>, greater<>> pq;
+ll dist[200'001];
+
+int canReach[200'001];
+
+bool dfs(int cur, ll d)
+{
+    canReach[cur] = -1;
+
+    if(cur == B){
+        canReach[B] = 1;
+        return true;
+    }
+
+    bool flag = false;
+    for(auto[nxt, w]: adj[cur]){
+        if(dist[nxt] != d+w) continue;
+        if(canReach[nxt] == -1) continue;
+
+        if(canReach[nxt] == 1){
+            flag = true;
+        }
+        else{
+            bool r = dfs(nxt, d+w);
+            if(r) flag = true;
+        }
+    }
+
+    if(flag){
+        canReach[cur] = 1;
+        return true;
+    }
+    return false;
+}
+
+signed main()
+{
+    FASTIO;
+    cin >> N >> M >> A >> B;
+    for(int i = 0; i<M; i++){
+        int s, e, w;
+        cin >> s >> e >> w;
+        adj[s].push_back({e, w});
+        adj[e].push_back({s, w});
+    }
+
+    memset(dist, 0x7f, sizeof(ll)*(N+1));
+
+    pq.push({0LL, A});
+    dist[A] = 0LL;
+
+    while(!pq.empty()){
+        auto[d, cur] = pq.top();
+        pq.pop();
+
+        if(d!=dist[cur]) continue;
+
+        for(auto[nxt, w]: adj[cur]){
+            if(dist[nxt] <= d+w) continue;
+            dist[nxt] = d+w;
+            pq.push({dist[nxt], nxt});
+        }
+    }
+    
+    dfs(A, 0LL);
+    vector<int> ans;
+    for(int i = 1; i<=N; i++){
+        if(canReach[i] == 1) ans.push_back(i);
+    }
+    cout << ans.size() <<"\n";
+    for(int e: ans) cout << e << " ";
+
+    return 0;
+}
