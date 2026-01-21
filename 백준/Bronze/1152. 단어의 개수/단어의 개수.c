@@ -2,28 +2,31 @@
 #include <stdio.h>
 #include <string.h>
 
-int ans = 0;
-char str[1000001];
+char arr[1000001] = { 0, };
 
-int main()
-{
-	// fgets(str, sizeof(str), stdin);
-	gets(str);
+int main() {
 
-    size_t n = strlen(str);
-    int wasblank = 1;
+    size_t end;
+    int a = 0;
 
-    for(int i = 0; i<n; i++){
-        if(str[i] == ' '){
-            wasblank = 1;
+    gets(arr);
+
+    end = strlen(arr);
+
+    for (int i = 0; i < end; i++) {
+        if (arr[i] == ' ') {
+            a++;
         }
-        else{
-            if(wasblank){
-                ans++;
-            }
-            wasblank = 0;
-        }
+    } 
+    a++;
+
+    if (arr[0] == ' ') {
+        a--;
     }
-    printf("%d", ans);
-	return 0;
+    if (arr[end - 1] == ' ') {
+        a--;
+    }
+    printf("%d", a);
+
+    return 0;
 }
