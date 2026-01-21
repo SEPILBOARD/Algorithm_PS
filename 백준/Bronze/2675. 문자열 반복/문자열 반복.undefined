@@ -1,0 +1,23 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+
+int n,a,end;
+char arr[21];
+
+int main()
+{    
+    scanf("%d", &n);
+    for (int t = 0; t < n; t++) {
+        scanf("%d%s", &a,arr);
+        end = strlen(arr);
+        for (int y = 0; y < end; y++) {
+            for (int u = 0; u < a; u++) {
+                printf("%c", arr[y]);
+            }
+        }
+        printf("\n");
+    }
+
+    return 0;
+}
