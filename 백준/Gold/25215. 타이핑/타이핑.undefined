@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long int ll;
+
+int N;
+string s;
+
+int dp[3'005][2];
+
+int go(int idx, int shft)
+{
+    int &ret = dp[idx][shft];
+    if(ret != -1) return ret;
+
+    bool isCap = ('A'<=s[idx-1] && s[idx-1]<='Z');
+
+    if(isCap){
+        if(shft){
+            ret = min(go(idx-1, 0)+2, go(idx-1, 1)+1);
+        }
+        else{
+            ret = min(go(idx-1, 0)+2, go(idx-1, 1)+2);
+        }
+    }
+    else{
+        if(shft){
+            ret = min(go(idx-1, 0)+2, go(idx-1, 1)+2);
+        }
+        else{
+            ret = min(go(idx-1, 0)+1, go(idx-1, 1)+2);
+        }
+    }
+
+    return ret;
+}
+
+signed main()
+{
+    FASTIO;
+    cin >> s;
+    N = s.length();
+    
+    memset(dp, -1, sizeof dp);
+    dp[0][0] = 0;
+    dp[0][1] = 1;
+
+    cout << min(go(N, 0), go(N, 1));
+
+    return 0;
+}
