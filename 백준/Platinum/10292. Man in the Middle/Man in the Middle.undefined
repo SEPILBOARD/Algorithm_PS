@@ -1,0 +1,70 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long ll;
+
+int n, m;
+vector<int> adj[30'001];
+int ord[30'001];
+int idx = 1;
+
+bool isCut[30'001];
+
+int dfs(int cur)
+{
+    ord[cur] = idx++;
+
+    int ret = ord[cur];
+    int ccnt = 0;
+
+    for(int nxt: adj[cur]){
+        if(ord[nxt]){
+            ret = min(ret, ord[nxt]);
+            continue;
+        }
+        else{
+            int low = dfs(nxt);
+            ret = min(ret, low);
+            ccnt++;
+            
+            if(ord[cur] != 1 && ord[cur]<=low) isCut[cur] = true;
+        }
+    }
+    if(ord[cur] == 1 && ccnt>=2) isCut[cur] = true;
+
+    return ret;
+}
+
+void solve()
+{
+    cin >> n >> m;
+    for(int i = 1; i<=n; i++) adj[i].clear();
+    memset(ord, 0, sizeof(int)*(n+1));
+    memset(isCut, 0, sizeof(bool)*(n+1));
+
+    for(int i = 0; i<m; i++){
+        int x, y;
+        cin >> x >> y;
+        adj[x].push_back(y);
+        adj[y].push_back(x);
+    }
+    
+    idx = 1;
+    dfs(1);
+    
+    for(int i = 1; i<=n; i++){
+        if(isCut[i]){
+            cout << "YES\n";
+            return;
+        }
+    }
+    cout << "NO\n";
+}
+
+signed main()
+{
+    FASTIO;
+    int _tc; cin >> _tc;
+    while(_tc--) solve();
+    return 0;
+}
