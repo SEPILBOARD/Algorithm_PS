@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long int ll;
+
+int n, m;
+vector<int> adj[100'001];
+
+int dp[100'001];
+
+int go(int cur)
+{
+    int &ret = dp[cur];
+    if(ret != -1) return ret;
+
+    ret = 1;
+    for(int nxt: adj[cur]){
+        if(adj[nxt].size()<adj[cur].size()){
+            ret = max(ret, go(nxt)+1);
+        }
+    }
+
+    return dp[cur] = ret;
+}
+
+signed main()
+{
+    FASTIO;
+    cin >> n >> m;
+    for(int i = 0; i<m; i++){
+        int x, y;
+        cin >> x >> y;
+        adj[x].push_back(y);
+        adj[y].push_back(x);
+    }
+
+    memset(dp, -1, sizeof dp);
+    int ans = 0;
+    for(int i = 0; i<n; i++){
+        ans = max(ans, go(i));
+    }
+
+    cout << ans <<"\n";
+
+    return 0;
+}
