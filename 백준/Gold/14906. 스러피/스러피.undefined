@@ -1,0 +1,94 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long int ll;
+
+int n;
+string s;
+
+int slimps_idx = 0;
+int slumps_idx = 0;
+
+bool slumps(int idx)
+{
+    int i = idx;
+    
+    if(s[i] != 'D' && s[i]!='E') return false;
+    if(++i >= n) return false;
+    if(s[i] != 'F') return false;
+
+
+    while(i<n && s[i]=='F'){
+        i++;
+    }
+    if(i>=n) return false;
+    if(s[i] == 'G'){
+        slumps_idx = i+1;
+        return true;
+    }
+    if(!slumps(i)){
+        return false;
+    }
+    i = slumps_idx;
+    return true;
+}
+
+bool slimps(int idx)
+{
+    int i = idx;
+    if(s[i] != 'A') return false;
+    if(++i >= n) return false;
+    if(s[i] == 'H'){
+        slimps_idx = i+1;
+        return true;
+    }
+
+    if(s[i] == 'B'){
+        if(++i>=n) return false;
+        if(!slimps(i)) return false;
+        i = slimps_idx;
+        if(i>=n) return false;
+        if(s[i] == 'C'){
+            slimps_idx = i+1;
+            return true;
+        }
+        else return false;
+    }
+    else{
+        if(!slumps(i)) return false;
+        i = slumps_idx;
+        if(i>=n) return false;
+        if(s[i] == 'C'){
+            slimps_idx = i+1;
+            return true;
+        }
+        else return false;
+    }
+}
+
+void solve()
+{
+    cin >> s;
+    n = s.length();
+
+    // if(slimps(0)) cout << "ok\n";
+    // else cout << "no\n";
+
+    bool isSlimps = slimps(0);
+    bool isSlumps = slumps(slimps_idx);
+    
+    if(isSlimps && isSlumps && slumps_idx == n) cout << "YES\n";
+    else cout << "NO\n";
+    
+    // if(slumps(0)) cout << "ok\n";
+}
+
+signed main()
+{
+    FASTIO;
+    int tc; cin >> tc;
+    cout << "SLURPYS OUTPUT\n";
+    for(int i = 0; i<tc; i++) solve();
+    cout << "END OF OUTPUT\n"; 
+    return 0;
+}
