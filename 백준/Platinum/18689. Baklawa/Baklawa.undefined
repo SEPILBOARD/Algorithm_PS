@@ -1,0 +1,56 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long ll;
+
+int X, Y, Z, n;
+tuple<int, int, int> xyz[101];
+int a[6];
+
+void solve()
+{
+    cin >> X >> Y >> Z >> n;
+    int x1 = X;
+    int x2 = 0;
+    int y1 = Y;
+    int y2 = 0;
+    int z1 = Z;
+    int z2 = 0;
+    
+    for(int i = 0; i<n; i++){
+        int x, y, z;
+        cin >> x >> y >> z;
+        
+        x1 = min(x1, x);
+        x2 = max(x2, x);
+        y1 = min(y1, y);
+        y2 = max(y2, y);
+        z1 = min(z1, z);
+        z2 = max(z2, z);
+    }
+
+    if(n == 0){
+        if((X-1)^(Y-1)^(Z-1)) cout << "Alice\n";
+        else cout << "Bob\n";
+        return;
+    }
+
+    a[0] = x1-1;
+    a[1] = X-x2;
+    a[2] = y1-1;
+    a[3] = Y-y2;
+    a[4] = z1-1;
+    a[5] = Z-z2;
+    
+    int sg = a[0]^a[1]^a[2]^a[3]^a[4]^a[5];
+    if(sg) cout << "Alice\n";
+    else cout << "Bob\n";
+}
+
+signed main()
+{
+    FASTIO;
+    int tc; cin >> tc;
+    while(tc--) solve();
+    return 0;
+}
