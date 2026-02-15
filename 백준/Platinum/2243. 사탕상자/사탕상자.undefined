@@ -1,0 +1,68 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long ll;
+
+
+class Seg
+{
+    private:
+        int n;
+        vector<int> tree;
+
+        void upd(int node, int start, int end, int idx, int val)
+        {
+            if(idx<start || end<idx) return;
+            if(start == end){
+                tree[node] += val;
+                return;
+            }
+
+            int mid = start+end>>1;
+            upd(2*node, start, mid, idx, val);
+            upd(2*node+1, mid+1, end, idx, val);
+            tree[node] = tree[2*node]+tree[2*node+1];
+        }
+
+        int qry(int node, int start, int end, int cnt)
+        {
+            if(start == end) return start;
+            int mid = start+end>>1;
+            if(tree[2*node]>=cnt) return qry(2*node, start, mid, cnt);
+            else return qry(2*node+1, mid+1, end, cnt-tree[2*node]);
+        }
+
+    public:
+        Seg(int _n)
+        {
+            this->n = _n;
+            tree.resize(4*n, 0);
+        }
+
+        void upd(int idx, int val) { upd(1, 1, n, idx, val); }
+        int qry(int cnt) { return qry(1, 1, n, cnt); }
+};
+
+signed main()
+{
+    FASTIO;
+    Seg seg(1'000'000);
+
+    int n;
+    cin >> n;
+    for(int i = 0; i<n; i++){
+        int a, b, c;
+        cin >> a >> b;
+        if(a == 1){
+            int ans = seg.qry(b);
+            cout << ans <<"\n";
+            seg.upd(ans, -1);
+        }
+        else{
+            cin >> c;
+            seg.upd(b, c);
+        }
+    }
+    
+    return 0;
+}
