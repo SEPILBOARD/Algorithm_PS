@@ -1,0 +1,88 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long ll;
+
+class Seg
+{
+    private:
+        int n;
+        vector<int> tree;
+        vector<int> lazy;
+
+        void prop(int node, int start, int end)
+        {
+            if(lazy[node] == 0) return;
+
+            tree[node] = (end-start+1) - tree[node];
+
+            if(start != end){
+                int mid = start+end>>1;
+                lazy[2*node] ^= lazy[node];
+                lazy[2*node+1] ^= lazy[node];
+            }
+
+            lazy[node] = 0;
+        }
+
+        void upd(int node, int start, int end, int left, int right, int val)
+        {
+            prop(node, start, end);
+            if(right<start || end<left) return;
+            if(left<=start && end<=right){
+                lazy[node] ^= val;
+                prop(node, start, end);
+                return;
+            }
+
+            int mid = start+end>>1;
+            upd(2*node, start, mid, left, right, val);
+            upd(2*node+1, mid+1, end, left, right, val);
+
+            tree[node] = tree[2*node]+tree[2*node+1];
+        }
+
+        int qry(int node, int start, int end, int left, int right)
+        {
+            prop(node, start, end);
+            if(right<start || end<left) return 0;
+            if(left<=start && end<=right) return tree[node];
+
+            int mid = start+end>>1;
+            int l = qry(2*node, start, mid, left, right);
+            int r = qry(2*node+1, mid+1, end, left, right);
+
+            return l+r;
+        }
+
+    public:
+        Seg(int n): n(n)
+        {
+            tree.resize(4*n);
+            lazy.resize(4*n);
+        }
+
+        void upd(int left, int right, int val) {upd(1, 1, n, left, right, val);}
+        int qry(int left, int right) {return qry(1, 1, n, left, right);}
+};
+
+signed main()
+{
+    FASTIO;
+    int n, m;
+    cin >> n >> m;
+    Seg seg(n);
+
+    for(int i = 0; i<m; i++){
+        int o, a, b;
+        cin >> o >> a>> b;
+        if(o == 0){
+            seg.upd(a, b, 1);
+        }
+        else{
+            cout << seg.qry(a, b) <<"\n";
+        }
+    }
+    
+    return 0;
+}
