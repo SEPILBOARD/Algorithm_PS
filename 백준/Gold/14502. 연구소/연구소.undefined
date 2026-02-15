@@ -1,0 +1,94 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long ll;
+
+int dx[4] = {0, 0, -1, 1};
+int dy[4] = {-1, 1, 0, 0};
+
+int n, m;
+int a[11][11];
+vector<pair<int, int>> vrus;
+
+bool v[8][8];
+
+int wcnt = 3;
+int ans = 0;
+
+int dfs(int x, int y)
+{
+    v[x][y] = true;
+    int ret = 1;
+
+    
+    for(int t = 0; t<4; t++){
+        int nx = x+dx[t];
+        int ny = y+dy[t];
+        if(nx<0 || ny<0 || nx>=n || ny>=m) continue;
+        if(v[nx][ny] || a[nx][ny] == 1) continue;
+        
+        ret += dfs(nx, ny);
+    }
+    
+    // cout<<"-" << x << ", " << y <<": " <<ret <<"\n";
+
+    return ret;
+}
+
+signed main()
+{
+    FASTIO;
+    cin >> n >> m;
+    for(int i = 0; i<n; i++){
+        for(int j = 0; j<m; j++){
+            cin >> a[i][j];
+            if(a[i][j] == 2) vrus.push_back({i, j});
+            else if(a[i][j] == 1) wcnt++;
+        }
+    }
+
+    for(int num1 = 0; num1<n*m; num1++){
+        int x1 = num1/m;
+        int y1 = num1%m;
+        if(a[x1][y1] != 0) continue;
+
+        for(int num2 = num1+1; num2<n*m; num2++){
+            int x2 = num2/m;
+            int y2 = num2%m;
+            if(a[x2][y2] != 0) continue;
+
+            for(int num3 = num2+1; num3<n*m; num3++){
+                int x3 = num3/m;
+                int y3 = num3%m;
+                if(a[x3][y3] != 0) continue;
+
+                a[x1][y1] = 1;
+                a[x2][y2] = 1;
+                a[x3][y3] = 1;
+
+                int vcnt = 0;
+                for(auto[vx, vy]: vrus){
+                    if(!v[vx][vy]){
+                        vcnt += dfs(vx, vy);
+                    }
+                }
+                ans = max(ans, n*m-wcnt-vcnt);
+
+                a[x1][y1] = 0;
+                a[x2][y2] = 0;
+                a[x3][y3] = 0;
+                memset(v, false, sizeof(v));
+
+                // cout << x1 <<"," << y1 <<"|" <<x2 <<"," <<y2<<"|"<<x3<<","<<y3<<": ";
+                // cout << vcnt <<"\n";
+                // break;
+            }
+            // break;
+        }
+        // break;
+    }
+
+    cout << ans <<"\n";
+
+    return 0;
+}
