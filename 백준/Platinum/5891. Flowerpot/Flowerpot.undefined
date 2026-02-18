@@ -1,0 +1,125 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long ll;
+
+class Seg
+{
+    private:
+        int n;
+        vector<pair<int, int>> tree;
+
+        void build(int node, int start, int end)
+        {
+            if(start==end){
+                tree[node] = {1e+9, -1e+9};
+            }
+            else{
+                int mid = (start+end)/2;
+                build(node*2, start, mid);
+                build(node*2+1, mid+1, end);
+
+                tree[node] = {min(tree[2*node].first, tree[2*node+1].first), max(tree[2*node].second, tree[2*node+1].second)};
+            }
+        }
+
+        void upd(int node, int start, int end, int idx, int val)
+        {
+            if(idx<start || end<idx) return;
+            if(start == end){
+                tree[node] = {min(tree[node].first, val), max(tree[node].second, val)};
+                return;
+            }
+
+            int mid = start+end>>1;
+            upd(2*node, start, mid, idx, val);
+            upd(2*node+1, mid+1, end, idx, val);
+            
+            tree[node] = {min(tree[2*node].first, tree[2*node+1].first), max(tree[2*node].second, tree[2*node+1].second)};
+        }
+
+        pair<int, int> qry(int node, int start, int end, int left, int right)
+        {
+            if(end<left || right<start) return {1e+9, -1e+9};
+            if(left<=start && end<=right) return tree[node];
+
+            int mid = start+end>>1;
+            pair<int,int> l = qry(2*node, start, mid, left, right);
+            pair<int,int> r = qry(2*node+1, mid+1, end, left, right);
+
+            return {min(l.first, r.first), max(l.second, r.second)};
+        }
+
+    public:
+        void init(int n)
+        {
+            this->n = n;
+            tree.resize(4*n);
+            build(1, 1, n);
+        }
+
+        void upd(int idx, int val) {upd(1, 1, n, idx, val);}
+        pair<int, int> qry(int left, int right) {return qry(1, 1, n, left, right);}
+};
+
+int n, d;
+pair<int, int> a[1'000'001];
+
+signed main()
+{
+    FASTIO;
+    cin >> n >> d;
+    for(int i = 0; i<n; i++){
+        cin >> a[i].first >> a[i].second;
+    }
+
+    sort(a, a+n);
+
+    Seg seg;
+    seg.init(n);
+
+    for(int i = 0; i<n; i++){
+        seg.upd(i+1, a[i].second);
+    }
+
+    int lo = -1;
+    int hi = 1'000'001;
+    while(lo+1<hi){
+        int mid = lo+hi>>1;
+
+        int lidx = 0;
+        int ridx = 0;
+        bool flag = false;
+        while(ridx<n){
+            if(a[ridx].first - a[lidx].first > mid){
+                lidx++;
+                continue;
+            }
+            
+            // cout <<mid <<": " <<a[ridx].first <<", " << a[lidx].first <<"\n";
+            auto[mn, mx] = seg.qry(lidx+1, ridx+1);
+            // cout << mid <<": " << mn <<", " << mx <<"\n";
+            if(mx-mn>=d){
+                flag = true;
+                break;
+            }
+            ridx++;
+        }
+        while(!flag && lidx<n){
+            auto[mn, mx] = seg.qry(lidx+1, n);
+            if(mx-mn>=d){
+                flag = true;
+                break;
+            }
+            lidx++;
+        }
+
+        if(flag) hi = mid;
+        else lo = mid;
+    }
+    
+    if(hi == 1'000'001) cout << -1;
+    else cout << hi;
+    
+    return 0;
+}
