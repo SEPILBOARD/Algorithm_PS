@@ -1,0 +1,76 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long ll;
+
+struct Node
+{
+    int p, q;
+    bool operator<(Node o){
+        if(q == o.q) return p<o.p;
+        return q< o.q;
+    }
+};
+
+int n, b;
+map<string, int> tidx;
+
+void solve()
+{
+    int m = 0;
+    tidx.clear();
+    vector<Node> parts[1'001];
+    
+    cin >> n >> b;
+    for(int i = 0; i<n; i++){
+        string ty, name;
+        int p, q;
+        cin >> ty >> name >> p >> q;
+        
+        if(tidx.count(ty)){
+            parts[tidx[ty]].push_back({p,q});
+        }
+        else{
+            tidx[ty] = m;
+            parts[m++].push_back({p,q});
+        }
+    }
+    
+    for(int i = 0; i<m; i++){
+        sort(parts[i].begin(), parts[i].end());
+    }
+    
+    ll lo = 0, hi = 1e+9+1;
+    while(lo+1<hi){
+        ll mid = lo+hi>>1;
+    
+        bool flag = true;
+        ll cost = 0;
+        for(int i = 0; i<m; i++){
+            int curCost = 1e+9+1;
+            for(auto[p, q]: parts[i]){
+                if(q<mid) continue;
+                curCost = min(curCost, p);
+            }
+
+            cost += curCost;
+            if(cost>b){
+                flag = false;
+                break;
+            }
+        }
+    
+        if(flag) lo = mid;
+        else hi = mid;
+    }
+    
+    cout << lo <<"\n";
+}
+
+signed main()
+{
+    FASTIO;
+    int tc; cin >> tc;
+    while(tc--) solve();
+    return 0;
+}
