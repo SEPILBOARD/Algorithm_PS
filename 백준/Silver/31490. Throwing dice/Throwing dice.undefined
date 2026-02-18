@@ -1,0 +1,28 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long ll;
+
+int n, m;
+int a[100'001];
+int b[100'001];
+
+signed main()
+{
+    FASTIO;
+
+    cin >> n >> m;
+    for(int i = 0; i<n; i++) cin >> a[i];
+    for(int i = 0; i<m; i++) cin >> b[i];
+
+    long double A = 0.0;
+    long double B = 0.0;
+    for(int i = 0; i<n; i++) A += (a[i]+1)/2.0;
+    for(int i = 0; i<m; i++) B += (b[i]+1)/2.0;
+
+    if(A>B) cout << "ALICE";
+    else if(A==B) cout << "TIED";
+    else cout <<"BOB";
+    
+    return 0;
+}
