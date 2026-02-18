@@ -1,0 +1,128 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long ll;
+
+struct Node
+{
+    ll l = 0;
+    ll cnt = 0;
+};
+
+class Seg
+{
+    private:
+        int n;
+        vector<ll> tree;
+        vector<Node> lazy;
+
+        void build(int node, int start, int end, vector<ll> &vec)
+        {
+            if(start == end){
+                tree[node] = vec[start];
+                return;
+            }
+
+            int mid = start+end>>1;
+            build(2*node, start, mid, vec);
+            build(2*node+1, mid+1, end, vec);
+
+            tree[node] = tree[2*node]+tree[2*node+1];
+        }
+
+        void prop(int node, int start, int end)
+        {
+            if(lazy[node].l == 0) return;
+            ll len = end-start+1;
+            tree[node] += (2*lazy[node].l + (len-1)*lazy[node].cnt)*len/2;
+
+            if(start != end){
+                int mid = start+end>>1;
+                ll leftlen = mid-start+1;
+                lazy[2*node].l += lazy[node].l;
+                lazy[2*node].cnt += lazy[node].cnt;
+
+                lazy[2*node+1].l += lazy[node].l + leftlen*lazy[node].cnt;
+                lazy[2*node+1].cnt += lazy[node].cnt;
+            }            
+            lazy[node] = {0ll, 0ll};
+        }
+
+        void upd(int node, int start, int end, int left, int right, ll val)
+        {
+            prop(node, start, end);
+            if(right<start || end<left) return;
+            if(left<=start && end<=right){
+                lazy[node].l += val;
+                lazy[node].cnt += 1;
+                prop(node, start, end);
+                return;
+            }
+
+            int mid = start+end>>1;
+            upd(2*node, start, mid, left, right, val);
+            upd(2*node+1, mid+1, end, left, right, 1LL*mid+1-left+1);
+
+            tree[node] = tree[2*node]+tree[2*node+1];
+        }
+
+        ll qry(int node, int start, int end, int left, int right)
+        {
+            prop(node, start, end);
+            if(right<start || end<left) return 0;
+            if(left<=start && end<=right) return tree[node];
+
+            int mid = start+end>>1;
+            ll l = qry(2*node, start, mid, left, right);
+            ll r = qry(2*node+1, mid+1, end, left, right);
+
+            return l+r;
+        }
+
+    public:
+        Seg(int n, vector<ll> &vec): n(n)
+        {   
+            tree.resize(4*n);
+            lazy.resize(4*n);
+            build(1, 1, n, vec);
+        }
+
+        void upd(int left, int right, ll val) {upd(1, 1, n, left, right, val);}
+        ll qry(int left, int right) {return qry(1, 1, n, left, right);}
+};
+
+signed main()
+{
+    FASTIO;
+    int n;
+    cin >> n;
+    vector<ll> a(n+1);
+    for(int i = 1; i<=n; i++){
+        cin >> a[i];
+    }
+
+    Seg seg(n, a);
+    // for(int i = 1; i<=n; i++){
+    //     cout << seg.qry(i, i) <<" ";
+    // }
+    // cout <<"\n";
+
+    int q;
+    cin >> q;
+    for(int i = 0; i<q; i++){
+        int c;
+        cin >> c;
+        if(c == 1){
+            int l, r;
+            cin >> l >> r;
+            seg.upd(l, r, 1);
+        }
+        else{
+            int x;
+            cin >> x;
+            cout << seg.qry(x, x) <<"\n";
+        }
+    }
+    
+    return 0;
+}
