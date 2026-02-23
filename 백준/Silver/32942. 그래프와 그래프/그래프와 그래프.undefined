@@ -1,0 +1,53 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long int ll;
+
+int A, B, C;
+
+vector<int> adj[11];
+
+signed main()
+{
+    FASTIO;
+    cin >> A >> B >> C;
+    
+    if(A == 0){
+        if(C%B == 0){
+            for(int x = 1; x<=10; x++){
+                adj[x].push_back(C/B);
+            }
+        }
+    }
+    else if(B == 0){
+        if(C%A == 0){
+            for(int y = 1; y<=10; y++){
+                adj[C/A].push_back(y);
+            }
+        }
+    }
+    else{
+        for(int x = 1; x<=10; x++){
+            int temp = C-A*x;
+            if(temp%B) continue;
+
+            int y = temp/B;
+            if(1<=y && y<=10){
+                adj[x].push_back(y);
+            }
+        }
+    }
+
+    for(int x = 1; x<=10; x++){
+        if(adj[x].size() == 0){
+            cout << "0\n";
+            continue;
+        }
+
+        sort(adj[x].begin(), adj[x].end());
+        for(int y: adj[x]) cout << y <<" ";
+        cout << "\n";
+    }
+    
+    return 0;
+}
