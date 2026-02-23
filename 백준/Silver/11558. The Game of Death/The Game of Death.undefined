@@ -1,0 +1,43 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long int ll;
+
+int n;
+int adj[10'001];
+
+void solve()
+{
+    cin >> n;
+    for(int i = 1; i<=n; i++){
+        cin >> adj[i];
+    }
+
+    queue<pair<int, int>> q;
+    q.push({1, 0});
+    while(!q.empty()){
+        auto[cur, d] = q.front();
+        q.pop();
+        // cout << cur <<", ";
+
+        if(cur == n){
+            cout << d <<"\n";
+            return;
+        }
+
+        if(2*n<=d){
+            break;
+        }
+
+        q.push({adj[cur], d+1});
+    }
+    cout << "0\n";
+}
+
+signed main()
+{
+    FASTIO;
+    int t; cin >> t;
+    while(t--) solve();
+    return 0;
+}
