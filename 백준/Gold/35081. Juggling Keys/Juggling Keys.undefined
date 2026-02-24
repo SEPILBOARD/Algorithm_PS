@@ -1,0 +1,69 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long ll;
+
+int n, k, q;
+
+priority_queue<tuple<int, int, int, int>, vector<tuple<int, int, int, int>>, greater<>> pq;
+
+bool ky[100'001];
+pair<int,int> lr[100'001];
+
+int main()
+{
+    FASTIO;
+    cin >> n >> k >> q;
+
+    for(int i = 0; i<q; i++){
+        int p, l, r;
+        cin >> p >> l >> r;
+
+        lr[i] = {l, r};
+        pq.push({l, 0, p, i});
+        pq.push({r, 1, p, i});
+    }
+
+    int cur = n;
+    while(!pq.empty()){
+        auto [t, io, p, i] = pq.top();
+        pq.pop();
+
+        if(io == 0){
+            cur--;
+        }
+        else{
+            if(cur == 0){
+                ky[i] = true;
+            }
+            cur++;
+        }
+    }
+
+    vector<pair<int,int>> need;
+    for(int i = 0; i<q; i++){
+        if(ky[i]) need.push_back(lr[i]);
+    }
+    sort(need.begin(), need.end());
+
+    priority_queue<int, vector<int>, greater<int>> curK;
+    for(auto [l, r] : need){
+        while(!curK.empty() && curK.top()<l){
+            curK.pop();
+        }
+
+        curK.push(r);
+
+        if(curK.size()>k){
+            cout << "impossible\n";
+            return 0;
+        }
+    }
+
+    for(int i = 0; i<q; i++){
+        cout << (ky[i] ? '1' : '0');
+    }
+    cout << "\n";
+
+    return 0;
+}
