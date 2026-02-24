@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+#define FASTIO ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+using namespace std;
+typedef long long ll;
+
+
+
+int main()
+{
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    vector<int> b(n);
+    ll asum = 0ll;
+    ll bsum = 0ll;
+    for(int i = 0; i<n; i++){
+        cin >> a[i] >> b[i];
+        asum += a[i];
+        bsum += b[i];
+    }
+
+    for(int i = 0; i<n; i++){
+        if(bsum-(asum-a[i])<=b[i]){
+            cout << i+1;
+            return 0;
+        }
+    }
+
+    cout << "impossible";
+    return 0;
+}
