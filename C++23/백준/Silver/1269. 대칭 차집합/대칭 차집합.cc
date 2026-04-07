@@ -4,7 +4,7 @@ using namespace std;
 typedef long long ll;
 
 int n, m;
-set<int> a;
+bool a[100'000'001];
 
 signed main()
 {
@@ -14,14 +14,14 @@ signed main()
     for(int i = 0; i<n; i++){
         int x;
         cin >> x;
-        a.insert(x);
+        a[x] = true;
     }
 
     int cnt = 0;
     for(int i = 0; i<m; i++){
         int x;
         cin >> x;
-        if(a.count(x)) cnt++;
+        if(a[x]) cnt++;
     }
 
     cout << n+m-2*cnt;
