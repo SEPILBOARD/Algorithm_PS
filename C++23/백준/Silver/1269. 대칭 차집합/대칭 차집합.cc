@@ -4,7 +4,7 @@ using namespace std;
 typedef long long ll;
 
 int n, m;
-bool a[100'000'001];
+char a[100'000'001];
 
 signed main()
 {
